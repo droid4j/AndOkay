@@ -23,7 +23,7 @@ import java.lang.annotation.Target;
 //      RetentionPolicy.CLASS   编译时
 //      RetentionPolicy.RUNTIME 运行时
 //      RetentionPolicy.SOURCE  源码时
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface ViewById {
 
     // --> @ViewById(R.id.xxx)

@@ -17,7 +17,7 @@ import java.lang.annotation.Target;
 // ElementType 代表 Annotation位置
 @Target(ElementType.METHOD)
 // RetentionPolicy 什么时候生效
-@Retention(RetentionPolicy.CLASS)
+@Retention(RetentionPolicy.RUNTIME)
 public @interface OnClick {
 
     // --> @OnClick(R.id.xxx)
