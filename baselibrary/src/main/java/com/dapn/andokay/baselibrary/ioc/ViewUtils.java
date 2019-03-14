@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.view.View;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 /**
  * <pre>
@@ -66,10 +67,6 @@ public class ViewUtils {
                 }
             }
         }
-
-
-
-
     }
 
     /**
@@ -78,6 +75,53 @@ public class ViewUtils {
      * @param object
      */
     private static void injectEvent(ViewFinder finder, Object object) {
+        // 1. 获取类里面所有方法
+        Class<?> aClass = object.getClass();
+        Method[] methods = aClass.getDeclaredMethods();
 
+        // 2. 获取OnClick里面的value值
+        for (Method method : methods) {
+            OnClick onClick = method.getAnnotation(OnClick.class);
+            if (onClick != null) {
+                int[] value = onClick.value();
+                for (int viewId : value) {
+                    // 3. findViewById 找到 View
+                    View view = finder.findViewById(viewId);
+                    if (view != null) {
+                        // 4. view.setOnClickListener
+                        view.setOnClickListener(new DeclaredOnClickListener(object, method));
+                    }
+                }
+            }
+        }
+    }
+
+    private static class DeclaredOnClickListener implements View.OnClickListener {
+
+        private Object object;
+        private Method method;
+
+        DeclaredOnClickListener(Object object, Method method) {
+            this.object = object;
+            this.method = method;
+        }
+
+        @Override
+        public void onClick(View v) {
+
+            // 私有、公有都可以访问
+            method.setAccessible(true);
+            try {
+                // 5. 反射执行方法
+                method.invoke(object, v);
+            } catch (Exception e) {
+                // e.printStackTrace();
+                try {
+                    method.invoke(object, (Object[]) null); // 无参函数走这里
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                }
+            }
+        }
     }
 }
