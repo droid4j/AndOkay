@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 //    ElementType.FIELD         属性
 //    ElementType.Type          类上
 //    ElementType.CONSTRUCTOR   构造函数上
-@Target(ElementType.CONSTRUCTOR)
+@Target(ElementType.FIELD)
 // RetentionPolicy 什么时候生效
 //      RetentionPolicy.CLASS   编译时
 //      RetentionPolicy.RUNTIME 运行时
