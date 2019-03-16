@@ -142,7 +142,8 @@ public class ViewUtils {
                 try {
                     method.invoke(object, (Object[]) null); // 无参函数走这里
                 } catch (Exception e1) {
-                    e1.printStackTrace();
+                    throw new RuntimeException("invoke method error:" +
+                            object.getClass().getName() + "#" + method.getName(), e1);
                 }
             }
         }

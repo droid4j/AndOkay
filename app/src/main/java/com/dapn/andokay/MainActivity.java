@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dapn.andokay.baselibrary.base.BaseActivity;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
@@ -26,6 +27,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.test_tv)
     public void testClick(View view) {
         mTestTv.setText("@OnClick");
+        int i = 2 / 0;
         Toast.makeText(this, "onClick", Toast.LENGTH_SHORT).show();
     }
 
