@@ -6,13 +6,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dapn.andokay.baselibrary.base.BaseActivity;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
 import com.dapn.andokay.baselibrary.ioc.ViewUtils;
+import com.dapn.framelibrary.BaseSkinActivity;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends BaseSkinActivity {
 
     @ViewById(R.id.test_tv)
     private TextView mTestTv;
