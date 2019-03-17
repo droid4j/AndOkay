@@ -1,10 +1,10 @@
 # Android热修复
 
-1､收集崩溃信息上传服务器
+##1､收集崩溃信息上传服务器
 
 把崩溃信息保存到内存卡中，等上线之后，将内存卡中的崩溃信息上传到服务器。
 
-1.1 创建异常捕获类
+###1.1 创建异常捕获类
 
 ```java
 public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
@@ -62,7 +62,7 @@ public class ExceptionCrashHandler implements Thread.UncaughtExceptionHandler {
 5. 全局异常，都会走这里！！！
 6. 让系统默认处理，我们只取异常，不要打断系统的处理
 
-1.2 在Application中使用
+###1.2 在Application中使用
 
 ```java
 public class BaseApp extends Application {
@@ -77,7 +77,7 @@ public class BaseApp extends Application {
 
 1. 设置全局异常捕获类
 
-1.3 模拟异常
+###1.3 模拟异常
 
 ```java
 @OnClick(R.id.test_tv)
@@ -88,7 +88,7 @@ public void testClick(View view) {
 }
 ```
 
-1.4 查看logcat
+###1.4 查看logcat
 
     03-16 23:47:27.051 31537-31537/com.dapn.andokay E/ExceptionCrashHandler: 报异常了
     
@@ -97,4 +97,37 @@ public void testClick(View view) {
 
 不仅可以看到我们打印的log，还看到了异常抛出的异常
 
+### 1.5 完善uncaughtException方法
+
+异常捕获我们需要做到以下几点：
+
+1. 获取异常手机信息，方便定位
+2. 获取异常信息，在保持不打扰用户的前提下，完成bug修复
+3. 不能打断系统行为，也就是说，我们捕获异常，不能影响系统默认行为
+
+具体实现，如下：
+
+```java
+@Override
+public void uncaughtException(Thread t, Throwable ex) {
+    // 全局异常
+    Log.e(TAG, "报异常了");
+
+    // 1 获取信息
+    // 1.1 崩溃的详情信息
+    // 1.2 手机信息
+    // 1.3 版本号
+    // 2 保存当前文件，等应用再次启动再上传（上传问题不在这里处理）
+    String crashFileName = saveInfo2SDCard(ex);
+    Log.e(TAG, "异常信息已存入文件：" + crashFileName);
+
+    // 3. 缓存崩溃日志文件
+    cacheCrashFile(crashFileName);
+
+    // 让系统默认处理
+    defaultExceptionHandler.uncaughtException(t, ex);
+}
+```
+
+具体实现见：[ExceptionCrashHandler.java](./baselibrary/src/main/java/com/dapn/andokay/baselibrary/ExceptionCrashHandler.java)
 
