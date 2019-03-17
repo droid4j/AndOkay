@@ -1,11 +1,10 @@
 package com.dapn.andokay;
 
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
@@ -20,6 +19,8 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
+        // 获取上次崩溃文件，上传到服务器
+        ExceptionCrashHandler.getInstance().checkAndUploadCrash();
     }
 
     @Override
