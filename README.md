@@ -15,5 +15,5 @@ android is Okay!
 [模板设计模式构建BaseActivity](./base_activity.md)
 
 ## 三、Android热修复
-[Android热修复](./hot_fix.md)
+[Android热修复](./doc/hot_fix.md)
 

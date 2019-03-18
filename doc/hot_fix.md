@@ -131,3 +131,126 @@ public void uncaughtException(Thread t, Throwable ex) {
 
 具体实现见：[ExceptionCrashHandler.java](./baselibrary/src/main/java/com/dapn/andokay/baselibrary/ExceptionCrashHandler.java)
 
+## 2､阿里开源的解决方案
+
+AndFix下载地址： https://github.com/alibaba/AndFix
+
+### 2.1 接入
+
+#### 2.1.1 添加依赖
+
+```groovy
+dependencies {
+	compile 'com.alipay.euler:andfix:0.5.0@aar'
+}
+```
+
+#### 2.1.2 初始化
+
+在自定义的Application中，添加如下代码：
+
+```java
+@Override
+public void onCreate() {
+    super.onCreate();
+    // 设置全局异常捕获类
+    ExceptionCrashHandler.getInstance().init(this);
+
+    mPatchManager = new PatchManager(this);			// 1
+    mPatchManager.init(getVersionCode()+"");		// 2
+    mPatchManager.loadPatch();									// 3
+}
+
+//获取版本号
+private int getVersionCode() {
+    PackageManager packageManager = getPackageManager();
+    PackageInfo packageInfo = null;
+    try {
+        packageInfo = packageManager.getPackageInfo(getPackageName(), PackageManager.GET_ACTIVITIES);
+    } catch (PackageManager.NameNotFoundException e) {
+        e.printStackTrace();
+    }
+    return packageInfo.versionCode;
+}
+```
+
+1. 初始化阿里的热修复
+2. 初始化当前应用版本
+3. 加载之前的差分包
+
+#### 2.1.3 检测并加载差分包
+
+```java
+@Override
+protected void initData() {
+    // 获取上次崩溃文件，上传到服务器
+    ExceptionCrashHandler.getInstance().checkAndUploadCrash();
+
+    // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
+    // 测试，直接获取本地sdcard中的 fix.apatch
+    File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
+    if (fixFile.exists()) {
+        try {
+            BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
+            Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+        }
+    }
+}
+```
+
+#### 2.2 AndFix使用
+
+**注意：在打包之前，一定要添加权限，否则，你死都不知道怎么死的！〜**
+
+```xml
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+```
+
+1. 创建应用签名
+
+2. 打包有bug的apk   —> old.apk
+
+3. 打包修复bug后的apk —> new.apk
+
+4. 使用apkpatch工具，打差分包
+
+   ./apkpatch.sh -f new.apk -t old.apk -o out -k AndOkay.jks -p 123456 -a key0 -e 123456
+
+执行完这个命令，如果成功生成差分包，终端会打印如下信息：
+
+```java
+add modified Method:V  testClick(Landroid/view/View;)  in Class:Lcom/dapn/andokay/MainActivity;
+```
+
+就是说，为哪个类的哪个方法生成新的方法
+
+这个工具位于：./AndFix/tools/apkpatch-1.0.3
+
+打包工具，各参数含义：
+
+```java
+-f 没有bug的新版包
+-t 有bug的旧版包 
+-o 生成的补丁文件所在文件夹 
+-k 签名密钥 
+-p 签名密钥密码 
+-a 签名密钥别名 
+-e 签名别名密码
+```
+
+执行完该命令后，会在 out 目录下生成差分包:
+
+```java
+new-6379e0ea392f8bb72d4a5e3480dee484.apatch
+```
+
+####2.3 AndFix工具包及反编译
+
+[apkpatch工具使用及反编译.md](./apkpatch工具使用及反编译)
+
+
+
