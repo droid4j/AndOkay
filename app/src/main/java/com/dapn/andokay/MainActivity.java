@@ -1,5 +1,7 @@
 package com.dapn.andokay;
 
+import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -11,6 +13,9 @@ import com.dapn.andokay.baselibrary.ioc.ViewById;
 import com.dapn.andokay.baselibrary.ioc.ViewUtils;
 import com.dapn.framelibrary.BaseSkinActivity;
 
+import java.io.File;
+import java.io.IOException;
+
 public class MainActivity extends BaseSkinActivity {
 
     @ViewById(R.id.test_tv)
@@ -21,6 +26,21 @@ public class MainActivity extends BaseSkinActivity {
 
         // 获取上次崩溃文件，上传到服务器
         ExceptionCrashHandler.getInstance().checkAndUploadCrash();
+
+        // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
+        // 测试，直接获取本地sdcard中的 fix.apatch
+        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
+        Log.e("TAG", "fixFile" + fixFile.getAbsolutePath());
+        if (fixFile.exists()) {
+            // 修复bug
+            try {
+                BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
+                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     @Override
