@@ -250,7 +250,10 @@ new-6379e0ea392f8bb72d4a5e3480dee484.apatch
 
 ####2.3 AndFix工具包及反编译
 
-[apkpatch工具使用及反编译.md](./apkpatch工具使用及反编译)
+[apkpatch工具使用及反编译](./apkpatch工具使用及反编译.md)
+
+####2.4 apatch热修复原理
+[apatch热修复原理](./apatch热修复原理.md)
 
 
 
