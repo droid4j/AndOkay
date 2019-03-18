@@ -24,14 +24,14 @@ public class BaseApp extends Application {
     public void onCreate() {
         super.onCreate();
         // 设置全局异常捕获类
-        ExceptionCrashHandler.getInstance().init(this);
-
-        // 初始化阿里的热修复
-        mPatchManager = new PatchManager(this);
-        // 初始化当前应用版本
-        mPatchManager.init(getVersionCode());
-        // 加载之前的差分包
-        mPatchManager.loadPatch();
+//        ExceptionCrashHandler.getInstance().init(this);
+//
+//        // 初始化阿里的热修复
+//        mPatchManager = new PatchManager(this);
+//        // 初始化当前应用版本
+//        mPatchManager.init(getVersionCode());
+//        // 加载之前的差分包
+//        mPatchManager.loadPatch();
 
     }
 

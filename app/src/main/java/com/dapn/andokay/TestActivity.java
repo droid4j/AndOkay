@@ -1,6 +1,5 @@
 package com.dapn.andokay;
 
-import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
@@ -17,7 +16,7 @@ import com.dapn.framelibrary.BaseSkinActivity;
 import java.io.File;
 import java.io.IOException;
 
-public class MainActivity extends BaseSkinActivity {
+public class TestActivity extends BaseSkinActivity {
 
     @ViewById(R.id.test_tv)
     private TextView mTestTv;
@@ -25,23 +24,23 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-        /*// 获取上次崩溃文件，上传到服务器
-        ExceptionCrashHandler.getInstance().checkAndUploadCrash();
-
-        // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
-        // 测试，直接获取本地sdcard中的 fix.apatch
-        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
-        Log.e("TAG", "fixFile" + fixFile.getAbsolutePath());
-        if (fixFile.exists()) {
-            // 修复bug
-            try {
-                BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
-                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
-            }
-        }*/
+        // 获取上次崩溃文件，上传到服务器
+//        ExceptionCrashHandler.getInstance().checkAndUploadCrash();
+//
+//        // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
+//        // 测试，直接获取本地sdcard中的 fix.apatch
+//        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
+//        Log.e("TAG", "fixFile" + fixFile.getAbsolutePath());
+//        if (fixFile.exists()) {
+//            // 修复bug
+//            try {
+//                BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
+//                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+//            }
+//        }
     }
 
     @Override
@@ -62,7 +61,9 @@ public class MainActivity extends BaseSkinActivity {
 
     @OnClick(R.id.test_tv)
     public void testClick(View view) {
-        startActivity(new Intent(this, TestActivity.class));
+        mTestTv.setText("@OnClick");
+        int i = 2 / 0;
+        Toast.makeText(this, "onClick", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick(R.id.test2_tv)
