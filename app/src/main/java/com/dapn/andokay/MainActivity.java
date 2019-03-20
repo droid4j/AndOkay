@@ -8,6 +8,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
+import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
@@ -25,23 +26,22 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-        /*// 获取上次崩溃文件，上传到服务器
-        ExceptionCrashHandler.getInstance().checkAndUploadCrash();
+//        andfix();
 
-        // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
-        // 测试，直接获取本地sdcard中的 fix.apatch
-        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
-        Log.e("TAG", "fixFile" + fixFile.getAbsolutePath());
+        fixDexBug();
+    }
+
+    private void fixDexBug() {
+        File fixFile = new File(Environment.getExternalStorageDirectory() + "fix.dex");
+
         if (fixFile.exists()) {
-            // 修复bug
+            FixDexManager fixDexManager = new FixDexManager(this);
             try {
-                BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
-                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
-            } catch (IOException e) {
+                fixDexManager.fixDex(fixFile.getAbsolutePath());
+            } catch (Exception e) {
                 e.printStackTrace();
-                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
             }
-        }*/
+        }
     }
 
     @Override
@@ -77,5 +77,25 @@ public class MainActivity extends BaseSkinActivity {
     public void testClick3() {
         int i = 2 / 2;  // 这种异常，不会crash!!!
         Toast.makeText(this, "onClick2", Toast.LENGTH_SHORT).show();
+    }
+
+    private void andfix() {
+                /*// 获取上次崩溃文件，上传到服务器
+        ExceptionCrashHandler.getInstance().checkAndUploadCrash();
+
+        // 每次启动的时候  去后台获取差分包  fix.apatch     然后修复本地bug
+        // 测试，直接获取本地sdcard中的 fix.apatch
+        File fixFile = new File(Environment.getExternalStorageDirectory(), "fix.apatch");
+        Log.e("TAG", "fixFile" + fixFile.getAbsolutePath());
+        if (fixFile.exists()) {
+            // 修复bug
+            try {
+                BaseApp.mPatchManager.addPatch(fixFile.getAbsolutePath());
+                Toast.makeText(this, "修复成功", Toast.LENGTH_SHORT).show();
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "修复失败", Toast.LENGTH_SHORT).show();
+            }
+        }*/
     }
 }
