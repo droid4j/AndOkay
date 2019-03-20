@@ -255,5 +255,6 @@ new-6379e0ea392f8bb72d4a5e3480dee484.apatch
 ####2.4 apatch热修复原理
 [apatch热修复原理](./apatch热修复原理.md)
 
-
+## 3､自己的实现方式
+[Android热修复技术](./Android热修复技术.md)
 
