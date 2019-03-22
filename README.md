@@ -17,3 +17,5 @@ android is Okay!
 ## 三、Android热修复
 [Android热修复](./doc/hot_fix.md)
 
+## 四、Builder设计模式构造Dialog
+[Builder设计模式构造Dialog](./doc/Builder设计模式构造Dialog.md)

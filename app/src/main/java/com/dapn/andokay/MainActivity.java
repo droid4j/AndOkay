@@ -4,10 +4,12 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
+import com.dapn.andokay.baselibrary.dialog.AlertDialog;
 import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
@@ -28,7 +30,7 @@ public class MainActivity extends BaseSkinActivity {
 
 //        andfix();
 
-        fixDexBug();
+//        fixDexBug();
     }
 
     private void fixDexBug() {
@@ -66,10 +68,23 @@ public class MainActivity extends BaseSkinActivity {
     }
 
     @OnClick(R.id.test2_tv)
-    @CheckNet("网络异常")
+//    @CheckNet("网络异常")
     public void testClick2() {
-        int i = 2 / 1;  // 这种异常，不会crash!!!
-        Toast.makeText(this, "onClick2", Toast.LENGTH_SHORT).show();
+        AlertDialog.Builder builder = new AlertDialog.Builder(this)
+                .setContentView(R.layout.dialog_example)
+                .setText(R.id.textView, "Custom Dialog");
+        AlertDialog dialog = builder.create();
+
+        final EditText editText = dialog.getView(R.id.editText);
+        builder.setOnClickListener(R.id.button, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this,
+                        editText.getText().toString().trim(),
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+        dialog.show();
     }
 
     @OnClick(R.id.test3_tv)
