@@ -73,6 +73,8 @@ public class HttpUtils {
             callback = EngineCallback.DEFAULT_CALL_BACK;
         }
 
+        callback.onPreExecute(mContext, mParams);
+
         // 判断执行方法
         if (mType == GET_TYPE) {
             get(mUrl, mParams, callback);
