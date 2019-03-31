@@ -45,7 +45,7 @@ public class MainActivity extends BaseSkinActivity {
 //        for (int i = 0; i < 10; i++) {
 //            daoSupport.insert(new Person(18 + i, "dapan_" + i, false));
 //        }
-        List<Person> people = daoSupport.query();
+        List<Person> people = daoSupport.querySupport().selection("age = ?").selectionArgs("23").query();
         System.out.println(people);
 
 
