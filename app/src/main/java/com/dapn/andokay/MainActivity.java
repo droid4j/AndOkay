@@ -4,17 +4,13 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
 import com.dapn.andokay.baselibrary.dialog.AlertDialog;
 import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
-import com.dapn.andokay.baselibrary.http.EngineCallback;
 import com.dapn.andokay.baselibrary.http.HttpUtils;
-import com.dapn.andokay.baselibrary.http.OkHttpEngine;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
@@ -30,7 +26,6 @@ import com.dapn.framelibrary.db.DaoSupportFactory;
 import com.dapn.framelibrary.db.IDaoSupport;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
@@ -41,37 +36,38 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-        IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
+//        IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
 //        for (int i = 0; i < 10; i++) {
 //            daoSupport.insert(new Person(18 + i, "dapan_" + i, false));
 //        }
-        List<Person> people = daoSupport.querySupport().selection("age = ?").selectionArgs("23").query();
-        System.out.println(people);
+//        List<Person> people = daoSupport.querySupport().selection("age = ?").selectionArgs("23").query();
+//        System.out.println(people);
 
 
-//        HttpUtils.with(this)
-//                .url("http://wanandroid.com/wxarticle/list/405/1/json")
-//                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
-//            @Override
-//            public void onError(Exception e) {
-//                Log.e("TAG", "onError: " + e.getMessage());
-//
-//                // 取消进度条
-//            }
-//
-//            @Override
-//            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
-//                Log.e("TAG", "onSuccess: " + result);
-//
-//                // 取消进度条
-//            }
-//
-//            @Override
-//            public void onPreExecute() {
-//                super.onPreExecute();
-//                // 显示进度条
-//            }
-//        });
+        HttpUtils.with(this)
+                .url("http://wanandroid.com/wxarticle/list/405/1/json")
+                .isCache(true)
+                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
+            @Override
+            public void onError(Exception e) {
+                Log.e("TAG", "onError: " + e.getMessage());
+
+                // 取消进度条
+            }
+
+            @Override
+            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
+                Log.e("TAG", "onSuccess: " + result);
+
+                // 取消进度条
+            }
+
+            @Override
+            public void onPreExecute() {
+                super.onPreExecute();
+                // 显示进度条
+            }
+        });
 //        andfix();
 
 //        fixDexBug();

@@ -5,10 +5,8 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 
 import com.alipay.euler.andfix.patch.PatchManager;
-import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
-import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
 import com.dapn.andokay.baselibrary.http.HttpUtils;
-import com.dapn.andokay.baselibrary.http.OkHttpEngine;
+import com.dapn.framelibrary.http.OkHttpEngine;
 
 /**
  * <pre>
