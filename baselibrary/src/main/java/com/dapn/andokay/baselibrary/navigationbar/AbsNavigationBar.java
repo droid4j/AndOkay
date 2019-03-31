@@ -35,7 +35,8 @@ public abstract class AbsNavigationBar<P extends AbsNavigationBar.Builder.Params
     private void createAndBindView() {
 
         if (mParams.parent == null) {
-            ViewGroup activityRoot = (ViewGroup) ((Activity) mParams.mContext).findViewById(android.R.id.content);
+//            ViewGroup activityRoot = (ViewGroup) ((Activity) mParams.mContext).findViewById(android.R.id.content);
+            ViewGroup activityRoot = (ViewGroup) ((Activity) mParams.mContext).getWindow().getDecorView();
             mParams.parent = (ViewGroup) activityRoot.getChildAt(0);
             Log.e("AbsNavigationBar", "parent: " + mParams.parent);
         }
