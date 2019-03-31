@@ -20,11 +20,14 @@ import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
 import com.dapn.andokay.baselibrary.ioc.ViewUtils;
 import com.dapn.andokay.model.BaseResp;
+import com.dapn.andokay.model.Person;
 import com.dapn.andokay.model.WxItem;
 import com.dapn.andokay.model.WxResult;
 import com.dapn.framelibrary.BaseSkinActivity;
 import com.dapn.framelibrary.DefaultNavigationBar;
 import com.dapn.framelibrary.HttpCallback;
+import com.dapn.framelibrary.db.DaoSupportFactory;
+import com.dapn.framelibrary.db.IDaoSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -36,6 +39,9 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initData() {
+
+        IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
+        daoSupport.insert(new Person(18, "dapan", false));
 
         HttpUtils.with(this)
                 .url("http://wanandroid.com/wxarticle/list/405/1/json")
