@@ -12,6 +12,9 @@ import android.widget.Toast;
 import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
 import com.dapn.andokay.baselibrary.dialog.AlertDialog;
 import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
+import com.dapn.andokay.baselibrary.http.EngineCallback;
+import com.dapn.andokay.baselibrary.http.HttpUtils;
+import com.dapn.andokay.baselibrary.http.OkHttpEngine;
 import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
@@ -30,6 +33,19 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
+        HttpUtils httpUtils = new HttpUtils();
+        httpUtils.exchangeEngine(new OkHttpEngine());
+        httpUtils.get("", null, new EngineCallback() {
+            @Override
+            public void onError(Exception e) {
+
+            }
+
+            @Override
+            public void onSuccess(String result) {
+
+            }
+        });
 //        andfix();
 
 //        fixDexBug();

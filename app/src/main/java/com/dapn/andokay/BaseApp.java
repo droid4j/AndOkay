@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import com.alipay.euler.andfix.patch.PatchManager;
 import com.dapn.andokay.baselibrary.ExceptionCrashHandler;
 import com.dapn.andokay.baselibrary.fixbug.FixDexManager;
+import com.dapn.andokay.baselibrary.http.HttpUtils;
+import com.dapn.andokay.baselibrary.http.OkHttpEngine;
 
 /**
  * <pre>
@@ -24,6 +26,8 @@ public class BaseApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+
+        HttpUtils.init(new OkHttpEngine());
         // 设置全局异常捕获类
 //        ExceptionCrashHandler.getInstance().init(this);
 //
