@@ -6,6 +6,7 @@ import android.util.ArrayMap;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
+import java.lang.reflect.WildcardType;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,6 +31,7 @@ public class HttpUtils {
     private Map<String, Object> mParams;
 
     private Context mContext;
+    private boolean isCache;
 
     private HttpUtils(Context context) {
         this.mContext = context;
@@ -53,6 +55,11 @@ public class HttpUtils {
 
     public HttpUtils get() {
         mType = GET_TYPE;
+        return this;
+    }
+
+    public HttpUtils isCache(boolean isCache) {
+        this.isCache = isCache;
         return this;
     }
 
@@ -88,7 +95,7 @@ public class HttpUtils {
     }
 
     // 默认使用 OkHttpEngine 引擎
-    private static IHttpEngine sHttpEngine = new OkHttpEngine();
+    private static IHttpEngine sHttpEngine = null;
 
     // 在application中初始化引擎
     public static void init(IHttpEngine httpEngine) {
@@ -100,11 +107,11 @@ public class HttpUtils {
     }
 
     private void get(String url, Map<String, Object> params, EngineCallback callback) {
-        sHttpEngine.get(mContext, url, params, callback);
+        sHttpEngine.get(isCache, mContext, url, params, callback);
     }
 
     private void post(String url, Map<String, Object> params, EngineCallback callback) {
-        sHttpEngine.post(mContext, url, params, callback);
+        sHttpEngine.post(isCache, mContext, url, params, callback);
     }
 
     // 拼接参数
@@ -132,9 +139,36 @@ public class HttpUtils {
     }
 
     // 解析一个类上面的class信息
-    public static Class<?> analysisClazzInfo(Object object) {
-        Type genType = object.getClass().getGenericSuperclass();
-        Type[] params = ((ParameterizedType) genType).getActualTypeArguments();
-        return (Class<?>) params[0];
+    public static Type analysisClazzInfo(Object object) {
+        Type superclass = object.getClass().getGenericSuperclass();
+        if (superclass instanceof Class) {
+            throw new RuntimeException("Missing type parameter.");
+        }
+        ParameterizedType parameterized = (ParameterizedType) superclass;
+        return parameterized.getActualTypeArguments()[0];
     }
+
+//    public static Type canonicalize(Type type) {
+//        if (type instanceof Class) {
+//            Class<?> c = (Class<?>) type;
+//            return c.isArray() ? new GenericArrayTypeImpl(canonicalize(c.getComponentType())) : c;
+//
+//        } else if (type instanceof ParameterizedType) {
+//            ParameterizedType p = (ParameterizedType) type;
+//            return new ParameterizedTypeImpl(p.getOwnerType(),
+//                    p.getRawType(), p.getActualTypeArguments());
+//
+//        } else if (type instanceof GenericArrayType) {
+//            GenericArrayType g = (GenericArrayType) type;
+//            return new GenericArrayTypeImpl(g.getGenericComponentType());
+//
+//        } else if (type instanceof WildcardType) {
+//            WildcardType w = (WildcardType) type;
+//            return new WildcardTypeImpl(w.getUpperBounds(), w.getLowerBounds());
+//
+//        } else {
+//            // type is either serializable as-is or unsupported
+//            return type;
+//        }
+//    }
 }

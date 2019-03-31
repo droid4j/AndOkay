@@ -1,7 +1,15 @@
-package com.dapn.andokay.baselibrary.http;
+package com.dapn.framelibrary.http;
 
 import android.content.Context;
+import android.text.TextUtils;
 import android.util.Log;
+
+import com.dapn.andokay.baselibrary.http.EngineCallback;
+import com.dapn.andokay.baselibrary.http.HttpUtils;
+import com.dapn.andokay.baselibrary.http.IHttpEngine;
+import com.dapn.andokay.baselibrary.utils.MD5Util;
+import com.dapn.framelibrary.db.DaoSupportFactory;
+import com.dapn.framelibrary.db.IDaoSupport;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,15 +38,28 @@ import okhttp3.Response;
  */
 public class OkHttpEngine implements IHttpEngine {
 
+    private static final String TAG = "OkHttpEngine";
+
     private OkHttpClient mOkHttpClient = new OkHttpClient();
 
     @Override
-    public void get(Context context, String url, Map<String, Object> params, final EngineCallback callback) {
-        url = HttpUtils.joinParams(url, params);
-        Log.w("OkHttpEngine", "get请求地址：" + url);
+    public void get(final boolean cache, Context context, final String url, Map<String, Object> params, final EngineCallback callback) {
+        final String finalUrl = HttpUtils.joinParams(url, params);
+
+        Log.w(TAG, "get请求地址：" + finalUrl);
+        final String md5 = MD5Util.md5(finalUrl);
+        Log.w(TAG, "md5: " + md5);
+
+        if (cache) {
+            String result = CacheBeanUtil.getCacheDataResult(md5);
+            if (!TextUtils.isEmpty(result)) {
+                Log.e(TAG, "有缓存，直接返回: " + result);
+                callback.onSuccess(result);
+            }
+        }
 
         Request.Builder builder = new Request.Builder()
-                .url(url)
+                .url(finalUrl)
                 .tag(context);
         // 默认为get请求，可省略
         builder.method("GET", null);
@@ -52,14 +73,32 @@ public class OkHttpEngine implements IHttpEngine {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 String result = response.body().string();
-                Log.w("OkHttpEngine", "get返回结果：" + result);
+
+                if (cache) {
+                    String cache = CacheBeanUtil.getCacheDataResult(md5);
+                    if (!TextUtils.isEmpty(cache)) {
+                        // 对比内容
+                        if (result.equals(cache)) {
+                            // 内容一致，不需要执行成功方法刷新界面
+                            Log.e(TAG, "数据和缓存一致: " + result);
+                            return;
+                        }
+                    }
+                }
+
+                Log.w(TAG, "get返回结果：" + result);
                 callback.onSuccess(result);
+
+                if (cache) {
+                    CacheBeanUtil.saveCache(md5, result);
+                    Log.e(TAG, "缓存成功：" + result);
+                }
             }
         });
     }
 
     @Override
-    public void post(Context context, String url, Map<String, Object> params, final EngineCallback callback) {
+    public void post(boolean cache, Context context, String url, Map<String, Object> params, final EngineCallback callback) {
         final String joinUrl = HttpUtils.joinParams(url, params);
         Log.w("OkHttpEngine", "post请求地址：" + joinUrl);
 
