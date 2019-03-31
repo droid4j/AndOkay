@@ -1,5 +1,7 @@
 package com.dapn.andokay.baselibrary.http;
 
+import android.content.Context;
+
 import java.util.Map;
 
 /**
@@ -14,10 +16,10 @@ import java.util.Map;
 public interface IHttpEngine {
 
     // get 请求
-    void get(String url, Map<String, Object> params, EngineCallback callback);
+    void get(Context context, String url, Map<String, Object> params, EngineCallback callback);
 
     // post 请求
-    void post(String url, Map<String, Object> params, EngineCallback callback);
+    void post(Context context, String url, Map<String, Object> params, EngineCallback callback);
 
     // 下载文件
 
