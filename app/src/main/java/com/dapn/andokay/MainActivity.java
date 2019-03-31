@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +17,7 @@ import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
 import com.dapn.andokay.baselibrary.ioc.ViewUtils;
 import com.dapn.framelibrary.BaseSkinActivity;
+import com.dapn.framelibrary.DefaultNavigationBar;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +55,11 @@ public class MainActivity extends BaseSkinActivity {
 
     @Override
     protected void initTitle() {
-
+        DefaultNavigationBar navigationBar = new DefaultNavigationBar
+                .Builder(this)
+                .setLeftTitle("返回")
+                .setTitle("详情页")
+                .build();
     }
 
     @Override
