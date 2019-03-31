@@ -19,8 +19,12 @@ import com.dapn.andokay.baselibrary.ioc.CheckNet;
 import com.dapn.andokay.baselibrary.ioc.OnClick;
 import com.dapn.andokay.baselibrary.ioc.ViewById;
 import com.dapn.andokay.baselibrary.ioc.ViewUtils;
+import com.dapn.andokay.model.BaseResp;
+import com.dapn.andokay.model.WxItem;
+import com.dapn.andokay.model.WxResult;
 import com.dapn.framelibrary.BaseSkinActivity;
 import com.dapn.framelibrary.DefaultNavigationBar;
+import com.dapn.framelibrary.HttpCallback;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,16 +38,26 @@ public class MainActivity extends BaseSkinActivity {
     protected void initData() {
 
         HttpUtils.with(this)
-                .url("http://wanandroid.com/wxarticle/list/405/1/json?k=java")
-                .get().execute(new EngineCallback() {
+                .url("http://wanandroid.com/wxarticle/list/405/1/json")
+                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
             @Override
             public void onError(Exception e) {
                 Log.e("TAG", "onError: " + e.getMessage());
+
+                // 取消进度条
             }
 
             @Override
-            public void onSuccess(String result) {
+            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
                 Log.e("TAG", "onSuccess: " + result);
+
+                // 取消进度条
+            }
+
+            @Override
+            public void onPreExecute() {
+                super.onPreExecute();
+                // 显示进度条
             }
         });
 //        andfix();
