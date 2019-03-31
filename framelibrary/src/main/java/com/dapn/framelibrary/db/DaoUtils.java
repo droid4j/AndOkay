@@ -1,5 +1,9 @@
 package com.dapn.framelibrary.db;
 
+import android.text.TextUtils;
+
+import java.util.Locale;
+
 /**
  * <pre>
  *     author : per4j
@@ -37,5 +41,12 @@ public class DaoUtils {
             value = " long";
         }
         return value;
+    }
+
+    public static String capitalize(String name) {
+        if (!TextUtils.isEmpty(name)) {
+            return name.substring(0, 1).toUpperCase(Locale.US) + name.substring(1);
+        }
+        return null;
     }
 }
