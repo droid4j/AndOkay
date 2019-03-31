@@ -33,19 +33,7 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-        HttpUtils httpUtils = new HttpUtils();
-        httpUtils.exchangeEngine(new OkHttpEngine());
-        httpUtils.get("", null, new EngineCallback() {
-            @Override
-            public void onError(Exception e) {
-
-            }
-
-            @Override
-            public void onSuccess(String result) {
-
-            }
-        });
+        HttpUtils.with(this).url("").addParam("", "").get().execute();
 //        andfix();
 
 //        fixDexBug();

@@ -14,4 +14,17 @@ public interface EngineCallback {
     void onError(Exception e);
 
     void onSuccess(String result);
+
+    // 默认的
+    public final EngineCallback DEFAULT_CALL_BACK = new EngineCallback() {
+        @Override
+        public void onError(Exception e) {
+
+        }
+
+        @Override
+        public void onSuccess(String result) {
+
+        }
+    };
 }
