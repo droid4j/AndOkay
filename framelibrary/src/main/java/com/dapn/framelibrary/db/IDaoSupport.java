@@ -2,6 +2,8 @@ package com.dapn.framelibrary.db;
 
 import android.database.sqlite.SQLiteDatabase;
 
+import com.dapn.framelibrary.db.query.QuerySupport;
+
 import java.util.List;
 
 /**
@@ -21,7 +23,7 @@ public interface IDaoSupport<T> {
 
     void insert(List<T> list);
 
-    List<T> query();
+    QuerySupport<T> querySupport();
 
     int delete(String whereClause, String[] whereArgs);
 

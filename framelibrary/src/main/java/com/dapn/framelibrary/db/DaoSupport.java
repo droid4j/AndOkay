@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.util.ArrayMap;
 import android.util.Log;
 
+import com.dapn.framelibrary.db.query.QuerySupport;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -31,6 +33,8 @@ public class DaoSupport<T> implements IDaoSupport<T> {
     // 参与 AppCompatViewInflater.class
     private static final Object[] sPutMethodArgs = new Object[2];
     private static final Map<String, Method> sPutMethods = new ArrayMap();
+
+    private QuerySupport<T> mQuerySupport;
 
     @Override
     public void init(SQLiteDatabase sqLiteDatabase, Class<T> clazz) {
@@ -132,102 +136,13 @@ public class DaoSupport<T> implements IDaoSupport<T> {
     }
 
     // 查询
-
     @Override
-    public List<T> query() {
-
-        Cursor cursor = mSqLiteDatabase.query(DaoUtils.getTableName(mClazz), null, null, null, null, null, null, null);
-
-        return cursorToLit(cursor);
-    }
-
-    private List<T> cursorToLit(Cursor cursor) {
-
-        List<T> list = new ArrayList<>();
-        if (cursor != null && cursor.moveToFirst()) {
-            do {
-                try {
-                    T newInstance = mClazz.newInstance(); // 这里调用的是无参构造函数
-                    Field[] fields = mClazz.getDeclaredFields();
-                    for (Field field : fields) {
-                        // 遍历属性
-                        field.setAccessible(true);
-                        String name = field.getName();
-                        // 获取角标
-                        int index = cursor.getColumnIndex(name);
-                        if (index == -1) {
-                            continue;
-                        }
-                        // 通过反射，获取游标的方法
-                        Method cursorMethod = cursorMethod(field.getType());
-                        if (cursorMethod != null) {
-                            Object value = cursorMethod.invoke(cursor, index);
-                            if (value == null) {
-                                continue;
-                            }
-
-                            // 处理一些特殊的部分
-                            if (field.getType() == boolean.class || field.getType() == Boolean.class) {
-                                if ("0".equals(String.valueOf(value))) {
-                                    value = false;
-                                } else if ("1".equals(String.valueOf(value))) {
-                                    value = true;
-                                }
-                            } else if (field.getType() == char.class || field.getType() == Character.class) {
-                                value = ((String) value).charAt(0);
-                            } else if (field.getType() == Date.class) {
-                                long date = (long) value;
-                                if (date <= 0) {
-                                    value = null;
-                                } else {
-                                    value = new Date(date);
-                                }
-                            }
-                            field.set(newInstance, value);
-                        }
-                    }
-                    list.add(newInstance);
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                } catch (InstantiationException e) {
-                    e.printStackTrace();
-                } catch (InvocationTargetException e) {
-                    e.printStackTrace();
-                } catch (NoSuchMethodException e) {
-                    e.printStackTrace();
-                }
-            } while (cursor.moveToNext());
+    public QuerySupport<T> querySupport() {
+        if (mQuerySupport == null) {
+            mQuerySupport = new QuerySupport<T>(mSqLiteDatabase, mClazz);
         }
-        cursor.close();
-        return list;
+        return mQuerySupport;
     }
-
-    private Method cursorMethod(Class<?> type) throws NoSuchMethodException {
-        String methodName = getColumnMethodName(type);
-        Method method = Cursor.class.getMethod(methodName, int.class);
-        return method;
-    }
-
-    private String getColumnMethodName(Class<?> fieldType) {
-        String typeName;
-        if (fieldType.isPrimitive()) {
-            typeName = DaoUtils.capitalize(fieldType.getName());
-        } else {
-            typeName = fieldType.getSimpleName();
-        }
-        String methodName = "get" + typeName;
-        if ("getBoolean".equals(methodName)) {
-            methodName = "getInt";
-        } else if ("getChar".equals(methodName) || "getCharacter".equals(methodName)) {
-            methodName = "getString";
-        } else if ("getDate".equals(methodName)) {
-            methodName = "getLong";
-        } else if ("getInteger".equals(methodName)) {
-            methodName = "getInt";
-        }
-        return methodName;
-    }
-
 
     // 修改
     @Override
