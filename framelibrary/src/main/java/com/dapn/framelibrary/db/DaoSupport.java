@@ -153,7 +153,7 @@ public class DaoSupport<T> implements IDaoSupport<T> {
 
     // 删除
     @Override
-    public int delete(String whereClause, String[] whereArgs) {
+    public int delete(String whereClause, String... whereArgs) {
         return mSqLiteDatabase.delete(DaoUtils.getTableName(mClazz), whereClause, whereArgs);
     }
 }
