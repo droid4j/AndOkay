@@ -33,7 +33,19 @@ public class MainActivity extends BaseSkinActivity {
     @Override
     protected void initData() {
 
-        HttpUtils.with(this).url("").addParam("", "").get().execute();
+        HttpUtils.with(this)
+                .url("http://wanandroid.com/wxarticle/list/405/1/json?k=java")
+                .get().execute(new EngineCallback() {
+            @Override
+            public void onError(Exception e) {
+                Log.e("TAG", "onError: " + e.getMessage());
+            }
+
+            @Override
+            public void onSuccess(String result) {
+                Log.e("TAG", "onSuccess: " + result);
+            }
+        });
 //        andfix();
 
 //        fixDexBug();

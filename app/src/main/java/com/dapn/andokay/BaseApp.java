@@ -38,13 +38,13 @@ public class BaseApp extends Application {
 //        // 加载之前的差分包
 //        mPatchManager.loadPatch();
 
-        try {
-            FixDexManager fixDexManager = new FixDexManager(this);
-            // 加载所有修复的dex包
-            fixDexManager.loadFixDex();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+//        try {
+//            FixDexManager fixDexManager = new FixDexManager(this);
+//            // 加载所有修复的dex包
+//            fixDexManager.loadFixDex();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
     }
 
