@@ -31,6 +31,7 @@ import com.dapn.framelibrary.db.IDaoSupport;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
 
@@ -41,31 +42,36 @@ public class MainActivity extends BaseSkinActivity {
     protected void initData() {
 
         IDaoSupport<Person> daoSupport = DaoSupportFactory.getFactory().getDao(Person.class);
-        daoSupport.insert(new Person(18, "dapan", false));
+//        for (int i = 0; i < 10; i++) {
+//            daoSupport.insert(new Person(18 + i, "dapan_" + i, false));
+//        }
+        List<Person> people = daoSupport.query();
+        System.out.println(people);
 
-        HttpUtils.with(this)
-                .url("http://wanandroid.com/wxarticle/list/405/1/json")
-                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
-            @Override
-            public void onError(Exception e) {
-                Log.e("TAG", "onError: " + e.getMessage());
 
-                // 取消进度条
-            }
-
-            @Override
-            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
-                Log.e("TAG", "onSuccess: " + result);
-
-                // 取消进度条
-            }
-
-            @Override
-            public void onPreExecute() {
-                super.onPreExecute();
-                // 显示进度条
-            }
-        });
+//        HttpUtils.with(this)
+//                .url("http://wanandroid.com/wxarticle/list/405/1/json")
+//                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
+//            @Override
+//            public void onError(Exception e) {
+//                Log.e("TAG", "onError: " + e.getMessage());
+//
+//                // 取消进度条
+//            }
+//
+//            @Override
+//            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
+//                Log.e("TAG", "onSuccess: " + result);
+//
+//                // 取消进度条
+//            }
+//
+//            @Override
+//            public void onPreExecute() {
+//                super.onPreExecute();
+//                // 显示进度条
+//            }
+//        });
 //        andfix();
 
 //        fixDexBug();

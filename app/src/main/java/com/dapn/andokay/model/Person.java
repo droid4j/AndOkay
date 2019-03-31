@@ -15,6 +15,11 @@ public class Person {
     public String name;
     public boolean flag;
 
+    // mClazz.newInstance();
+    public Person() {
+
+    }
+
     public Person(int age, String name, boolean flag) {
         this.age = age;
         this.name = name;
