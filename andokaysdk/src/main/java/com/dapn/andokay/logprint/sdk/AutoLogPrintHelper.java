@@ -1,4 +1,4 @@
-package com.dapn.andokay.okaylogprint.sdk;
+package com.dapn.andokay.logprint.sdk;
 
 import android.app.Activity;
 import android.support.annotation.NonNull;

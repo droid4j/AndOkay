@@ -1,13 +1,10 @@
-package com.dapn.andokay.okaylogprint.sdk;
+package com.dapn.andokay.logprint.sdk;
 
-import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
 import android.support.annotation.Keep;
 import android.view.View;
 import android.widget.Button;

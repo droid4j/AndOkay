@@ -1,2 +1,2 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.dapn.andokay.okaylogprint.sdk" />
+    package="com.dapn.andokay.logprint.sdk" />

@@ -10,10 +10,10 @@ dependencies {
 
 uploadArchives {
     repositories.mavenDeployer {
-        repository(url: uri("/reop"))
+        repository(url: uri("../repo"))
 
         pom.version = "1.0.0"
-        pom.artifactId = "OkayLogPrint"
+        pom.artifactId = "AndOkayLogPrint"
         pom.groupId = "com.dapn.andokay"
         pom.packaging = 'jar'
     }
