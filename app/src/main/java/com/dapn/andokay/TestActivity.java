@@ -46,6 +46,8 @@ public class TestActivity extends BaseSkinActivity {
     @Override
     protected void initView() {
 
+        getResources().getColor(R.color.colorAccent);
+
     }
 
     @Override

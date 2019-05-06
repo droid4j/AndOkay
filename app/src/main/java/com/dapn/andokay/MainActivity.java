@@ -1,10 +1,14 @@
 package com.dapn.andokay;
 
 import android.content.Intent;
+import android.content.res.AssetManager;
+import android.content.res.Resources;
+import android.graphics.drawable.Drawable;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +30,18 @@ import com.dapn.framelibrary.db.DaoSupportFactory;
 import com.dapn.framelibrary.db.IDaoSupport;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 public class MainActivity extends BaseSkinActivity {
 
     @ViewById(R.id.test_tv)
     private TextView mTestTv;
+
+    @ViewById(R.id.sikn)
+    private ImageView mIv;
 
     @Override
     protected void initData() {
@@ -44,30 +54,30 @@ public class MainActivity extends BaseSkinActivity {
 //        System.out.println(people);
 
 
-        HttpUtils.with(this)
-                .url("http://wanandroid.com/wxarticle/list/405/1/json")
-                .isCache(true)
-                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
-            @Override
-            public void onError(Exception e) {
-                Log.e("TAG", "onError: " + e.getMessage());
-
-                // 取消进度条
-            }
-
-            @Override
-            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
-                Log.e("TAG", "onSuccess: " + result);
-
-                // 取消进度条
-            }
-
-            @Override
-            public void onPreExecute() {
-                super.onPreExecute();
-                // 显示进度条
-            }
-        });
+//        HttpUtils.with(this)
+//                .url("http://wanandroid.com/wxarticle/list/405/1/json")
+//                .isCache(true)
+//                .get().execute(new HttpCallback<BaseResp<WxResult<WxItem>>>() {
+//            @Override
+//            public void onError(Exception e) {
+//                Log.e("TAG", "onError: " + e.getMessage());
+//
+//                // 取消进度条
+//            }
+//
+//            @Override
+//            public void onSuccess(BaseResp<WxResult<WxItem>> result) {
+//                Log.e("TAG", "onSuccess: " + result);
+//
+//                // 取消进度条
+//            }
+//
+//            @Override
+//            public void onPreExecute() {
+//                super.onPreExecute();
+//                // 显示进度条
+//            }
+//        });
 //        andfix();
 
 //        fixDexBug();
@@ -108,7 +118,34 @@ public class MainActivity extends BaseSkinActivity {
 
     @OnClick(R.id.test_tv)
     public void testClick(View view) {
-        startActivity(new Intent(this, TestActivity.class));
+//        startActivity(new Intent(this, TestActivity.class));
+
+
+        try {
+            // 读取本地资源
+            Resources superResources = getResources();
+            // 创建 AssetManager
+            AssetManager assetManager = AssetManager.class.newInstance();
+            // 添加本地下载好的皮肤
+            Method addAssetPath = AssetManager.class.getDeclaredMethod("addAssetPath", String.class);
+            addAssetPath.invoke(assetManager, Environment.getExternalStorageDirectory().getAbsolutePath()
+                    + File.separator + "skin.skin");
+
+            Resources resources = new Resources(assetManager, superResources.getDisplayMetrics(), superResources.getConfiguration());
+
+            int id = resources.getIdentifier("skin_1", "drawable", "com.dapn.andokay.skin");
+            Drawable drawable = resources.getDrawable(id);
+            mIv.setImageDrawable(drawable);
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @OnClick(R.id.test2_tv)
