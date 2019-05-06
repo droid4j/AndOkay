@@ -1,1 +1,1 @@
-include ':app', ':baselibrary', ':framelibrary', ':okaysdk', ':okayplugin'
+include ':app', ':baselibrary', ':framelibrary', ':andokaysdk', ':andokayplugin'
